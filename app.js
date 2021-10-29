@@ -5,13 +5,14 @@ function initpage(){
 function search(event){
 	event.preventDefault(); //must prevent default
 	var httpRequest = new XMLHttpRequest();//making object
+	var query=document.getElementById("query");
+
 	//set ajax response before opening and sending
-  httpRequest.onreadystatechange=function(){searchPhp(httpRequest);};
-  httpRequest.open("GET","superheroes.php",true); //create request
+  httpRequest.onreadystatechange=function(){searchPhp(httpRequest,query);};
+  httpRequest.open("GET","superheroes.php?q="+query.value,true); //create request
   httpRequest.send(); //sending request
-  //alert(httpRequest.status);
 }
-function searchPhp(httpRequest){
+function searchPhp(httpRequest,query){
 	
 	//alert(httpRequest.status +" "+httpRequest.readyState);
 	//note the captial S in readyState
@@ -19,7 +20,12 @@ function searchPhp(httpRequest){
 
 		if(httpRequest.status===200){
 			var response=httpRequest.responseText;
-			alert(response);
+
+			var result=document.getElementById("result");
+			//alert(response);
+			result.innerHTML=response;
+
+			//alert(response);
 		}
 		else{
 			alert("Problem");

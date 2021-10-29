@@ -1,3 +1,4 @@
+<style><?php include 'styles.css'; ?></style>
 <?php
 
 $superheroes = [
@@ -63,10 +64,43 @@ $superheroes = [
   ], 
 ];
 
-?>
 
-<ul>
-<?php foreach ($superheroes as $superhero): ?>
-  <li><?= $superhero['alias']; ?></li>
-<?php endforeach; ?>
-</ul>
+  if (isset($_GET["q"])){
+    $query=$_GET["q"]; 
+
+    //$info=" ";
+    if (!empty($query)){
+      $found=0;
+      if(filter_var($query, FILTER_SANITIZE_SPECIAL_CHARS)){
+         $query=htmlspecialchars($query);
+         foreach ($superheroes as $superhero){
+           if (strtolower($superhero['alias'])==strtolower($query )|| strtolower($superhero['name'])==strtolower($query)){
+              $info="<h2>RESULT</h2>";
+              $info.="<hr>";
+              $info.="<h3>".$superhero['alias']."</h3>";
+              $info.="<h4> A.K.A ".$superhero['name']."</h4>";
+              $info.="<p>".$superhero['biography']."</p>";
+              $found=1;
+
+           }
+         }
+        }
+        if($found==0){
+           $info="<h2>RESULT</h2>";
+            $info.="<hr>";
+            $info.="<h5>SUPERHERO NOT FOUND</h5>";
+        }
+    }
+    else{
+      $info="<h2>RESULT</h2><ul>";
+      $info.="<hr>";
+       foreach ($superheroes as $superhero){
+              $info.="<li>". $superhero['alias']."</li>";
+            }
+        $info.="</ul>";
+
+    }
+    echo $info;
+}
+  
+?>
